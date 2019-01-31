@@ -7,21 +7,6 @@ var db = mysql.createConnection({
   database: 'glamazon_prime'
 });
 
-// var connectAsync = () => {
-//   return new Promise((resolve, reject) => {
-//     db.connect((err, data) => {
-//       if (err) {
-//         console.log(err);
-//         console.log('failed to talk to database');
-//         reject(err);
-//       } else {
-//         console.log('spoke with database');
-//         resolve(data);
-//       }
-//     })
-//   })
-// }
-
 module.exports.read = callback => {
 
   var sql = 'select * from customers';
@@ -42,6 +27,8 @@ module.exports.read = callback => {
 
 module.exports.create = (tableName, callback) => {
 
+  var sql = 'select * from customers';
+  
   return new Promise((resolve, reject) => {
     db.query(sql, (err, data) => {
       if (err) {
