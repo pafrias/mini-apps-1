@@ -9,7 +9,6 @@ var BoardRow = props => (
             value={tile.value}
             style={tile.tokenStyle}
             onClick={(e) => {
-              // console.log(e.target);
               if (tile.active) {
                 props.action(e, tile.value)
               }
