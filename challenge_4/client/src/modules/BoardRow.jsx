@@ -1,7 +1,15 @@
+import React from 'react';
+
 var BoardRow = props => (
-  <div>
-    {props.tiles.map(tile => {
-      <div> HI </div>
+  <tr>
+    {props.row.map(tile => {
+      return(
+        <td id={tile.value}>HI
+          <div onClick={() => {props.action}}></div>
+        </td>)
     })}
-  </div>
+  </tr>
+  
 )
+
+export default BoardRow;
