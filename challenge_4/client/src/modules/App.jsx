@@ -10,14 +10,11 @@ class App extends React.Component {
       board: [],
       gameover: false,
       turn: 1
-      // if turn is odd, black's turn
-      // if turn is even, red's turn
     }
     this.clickHandler = this.clickHandler.bind(this);
   }
 
   render() {
-    console.log('rendering');
     var tableStyle = {
       width: '80%'
     }
@@ -29,7 +26,6 @@ class App extends React.Component {
     }
     return (
       <main>
-        <div>Pablo Rules</div>
         <table>
           <tbody style={tbodyStyle}>
             {this.state.board.map(row => {
@@ -50,19 +46,10 @@ class App extends React.Component {
     this.handleTurn(value);
   }
 
-  handleTurn(value) {
-    this.placeTile(value);
-    // check for victory
-    // if false and the board isnt full
-    // --> allow next turn
-    // if victory or board is full
-    // --> endgame()
-  }
-
-  placeTile(index) {
+  handleTurn(index) {
+    // place tile on board
     let turn = (this.state.turn % 2);
     let row = 5 - Math.floor(index/7);
-    console.log(row);
     let col = index % 7;
 
     this.setState(state => {
@@ -70,18 +57,24 @@ class App extends React.Component {
       let tile = new Tile(board[row][col].value);
       tile.active = false;
       if (turn) {
-        tile.tokenStyle['backgroundColor'] = 'black';
+        tile.tokenStyle.backgroundColor = 'black';
+        tile.counter = 1;
       } else {
         tile.tokenStyle.backgroundColor = 'red';
+        tile.counter = -1;
       }
       board[row][col] = tile;
       state.turn++;
       state.board = board;
       return state;
+    }, () => {
+      if (victoryCheck(this.state.board)) {
+        console.log('VICTORY');
+        // endgame 'victory'
+      } else if (this.state.turn > 41) {
+        // endgame 'draw'
+      }
     })
-    // toggle piece on this.state.board
-    // --> active becomes false
-    // --> color becomes red or black depending on turn number
     
   }
 
