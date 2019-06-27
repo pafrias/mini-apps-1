@@ -1,0 +1,18 @@
+td {
+  width: 50px;
+  height: 50px;
+  border: 1px dashed black;
+}
+
+td.active {
+  border: 1px solid green;
+}
+
+button#new_game {
+  visibility: hidden;
+}
+
+button#new_game.active {
+  visibility: visible;
+}
+
