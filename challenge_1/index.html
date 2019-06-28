@@ -6,14 +6,15 @@
 <body>
   <header id="header">
     <h1>Tic Tac Toe</h1>
+    <h2 id="game_over"></h2>
   </header>
-  <main>
-    <table id="game_board">
-    </table>
-  </main>
-  <footer>
-    <button id='new_game' type='button'>New Game?</button>
-  </footer>
-  <script src='./app.js'>
+  <div id="game_board">
+  </div>
+  <script src="./app.js"></script>
+  <script>
+    (function() {
+      var board = new TicTacToeBoard(document.getElementById("game_board"));
+      board.startGame();
+    }());
   </script>
 </body>

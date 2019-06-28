@@ -1,34 +1,41 @@
 
 //model of board
 class TicTacToeBoard {
-  constructor() {
-    this.clickHandler = this.clickHandler.bind(this);
-    this.gameOver = this.gameOver.bind(this);
-    this.boardNode = document.getElementById('game_board');
-  }
-  
-  /**
-   * @description renders the Tic Tac Toe Board to the DOM
-   */
-  resetBoard() {
-    this.playerOneTurn = true;
+  constructor(rootNode) {
     this.board = [
       [null, null, null], 
       [null, null, null], 
       [null, null, null]
     ];
-    this.boardNode.innerHTML = '';
+    this.playerOneTurn = true;
+    this.toggleSquare = this.toggleSquare.bind(this);
+    this.gameOver = this.gameOver.bind(this);
+    this.root = rootNode || document.getElementById('game_board');
+  }
+  
+  /**
+   * @description renders the Tic Tac Toe Board to the DOM
+   */
+  startGame() {
+    this.root.innerHTML = '';
+    let table = document.createElement('table');
+    let button = document.createElement('button');
     for (var i = 0; i < 3; i++) {
       var row = document.createElement('tr');
       row.id = `row-${i}`;
       for (var j = 0; j < 3; j++) {
         var square = document.createElement('td');
         square.className = `${i}_${j} active`;
-        square.addEventListener('click', this.clickHandler)
+        square.addEventListener('click', this.toggleSquare)
         row.append(square);
       }
-      this.boardNode.append(row);
+      table.append(row);
     }
+    button.id = 'new_game';
+    button.type = 'button';
+    // add type?
+    this.root.append(table);
+    this.root.append(button);
   }
 
   /**
@@ -36,7 +43,7 @@ class TicTacToeBoard {
    * row and column data
    * @param {Event} e click event
    */
-  clickHandler(e) {
+  toggleSquare(e) {
     const divClass = e.target.classList;
     if (divClass[1] === 'active') {
       const [row, col] = divClass[0].split('_');
@@ -102,39 +109,39 @@ class TicTacToeBoard {
     for (var i = 0; i < this.board.length; i++) {
       total += this.board[i][i];
     }
-    if (total === 3 || total === -3) {
-      return true;
-    }
+    if (total === 3 || total === -3) { return true; }
+
     total = 0;
 
     for (var i = 0; i < this.board.length; i++) {
       total += this.board[i][2-i];
     }
-    if (total === 3 || total === -3) {
-      return true;
-    }
+    if (total === 3 || total === -3) { return true; }
     return false;
   }
 
   gameOver(messageString) {
-    for (let div of document.getElementsByClassName('active')) {
-      div.classList = div.classList[0];
+    this.board = [
+      [null, null, null], 
+      [null, null, null], 
+      [null, null, null]
+    ];
+    this.playerOneTurn = true;
+    const remainingSquares = document.getElementsByClassName('active');
+    while (remainingSquares.length) {
+      const div = remainingSquares[0];
+      div.className = '';
     }
-    var message = document.createElement('h1');
-    message.innerText = messageString;
-    document.getElementById('header').appendChild(message);
-    document.getElementById('new_game').className = 'active';
+    const banner = document.getElementById('game_over');
+    const button = document.getElementById('new_game');
+    banner.innerText = messageString;
+    button.className = 'active';
+    button.innerText = 'New Game?';
     document.getElementById('new_game').addEventListener('click', () => {
-      document.getElementById('header').removeChild(message);
-      document.getElementById('new_game').className = '';
-      this.resetBoard();
+      banner.innerText = '';
+      button.className = '';
+      button.innerText = '';
+      this.startGame();
     });
   }
 }
-
-var newGame = () => {
-  var board = new TicTacToeBoard();
-  board.resetBoard();
-}
-
-newGame();
